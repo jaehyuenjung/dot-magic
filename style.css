@@ -5,6 +5,10 @@ body {
     width: 100vw;
     height: 100vh;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 canvas {
@@ -22,13 +26,15 @@ canvas {
     margin: 0;
     padding: 0;
     display: flex;
+    flex-direction: column-reverse;
     justify-content: center;
     align-items: center;
+    gap: 10px;
 }
 
 .stop-watch {
     display: block;
-    position: fixed;
+    position: absolute;
     left: 80%;
     top: 90%;
     font-size: 12px;

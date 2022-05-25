@@ -7,13 +7,28 @@ let workerManager;
 
 function setup() {
     const canvas = createCanvas(500, 500);
+    canvas.canvas.onclick = () => {
+        const input = document.createElement("input");
+        input.setAttribute("type", "file");
+        input.onchange = (e) => {
+            const el = e.target;
 
+            if (el.files && el.files[0]) {
+                el.files[0].data = URL.createObjectURL(el.files[0]);
+                gotFile(el.files[0]);
+                URL.revokeObjectURL(el.files[0]);
+            }
+
+            input.remove();
+        };
+        input.click();
+    };
     background(255);
     fill(0);
     noStroke();
     textSize(24);
     textAlign(CENTER);
-    text("Drag an image file onto the canvas.", width / 2, height / 2);
+    text("Load an image file onto the canvas.", width / 2, height / 2);
 
     let index = 0;
     for (let i = 0; i < height; i += per) {
@@ -64,12 +79,8 @@ function draw() {
     stopWatch.update();
 }
 
-function windowResized() {
-    stopWatch.reSize();
-}
-
 function gotFile(file) {
-    if (file.type === "image") {
+    if (file.type.includes("image")) {
         var img = createImg(file.data, " ", "", () => {
             const preImage = get();
             image(img, 0, 0, width, height);
