@@ -1,0 +1,40 @@
+body {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+canvas {
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 1px solid black;
+}
+
+#canvas-container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stop-watch {
+    display: block;
+    position: fixed;
+    left: 80%;
+    top: 90%;
+    font-size: 12px;
+    color: red;
+}
+
+.stop-watch__stop {
+    color: blue;
+}
