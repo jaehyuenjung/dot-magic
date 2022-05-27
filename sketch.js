@@ -1,9 +1,31 @@
 let count = 8;
-let per = 16;
+let per = 32;
 let randPosList = [];
 let myPixels = [];
 let stopWatch;
-let workerManager;
+let laserManager;
+let imageLoading;
+
+function pixelLoad(img) {
+    const preImage = get();
+    image(img, 0, 0, width, height);
+
+    let progress = 0;
+    const max = myPixels.reduce((result, arr) => result + arr.length, 0);
+
+    myPixels.forEach((arr) =>
+        arr.forEach((pixel) => {
+            pixel.init(
+                color(preImage.get(pixel.x, pixel.y)),
+                color(get(pixel.x, pixel.y))
+            );
+            setTimeout(() => {
+                progress += 1;
+                imageLoading.update(round((progress / max) * 100, 1));
+            }, 0);
+        })
+    );
+}
 
 function setup() {
     const canvas = createCanvas(500, 500);
@@ -23,6 +45,7 @@ function setup() {
         };
         input.click();
     };
+
     background(255);
     fill(0);
     noStroke();
@@ -56,7 +79,7 @@ function setup() {
     randPosList = shuffle(Array.from({ length: myPixels.length }, (_, i) => i));
     background(255);
 
-    workerManager = new WorkerManager(
+    laserManager = new LaserManager(
         count,
         randPosList,
         myPixels,
@@ -65,40 +88,36 @@ function setup() {
     );
     stopWatch = new StopWatch();
     stopWatch.start();
+
+    imageLoading = new ImageLoading();
     canvas.drop(gotFile);
 }
 
 function draw() {
-    const deltaT = millis() / 1000;
+    if (!imageLoading.isLoading()) {
+        const deltaT = millis() / 1000;
 
-    if (workerManager.isDone()) {
-        stopWatch.stop();
+        if (laserManager.isDone()) {
+            stopWatch.stop();
+        }
+
+        laserManager.update(deltaT);
+        stopWatch.update();
     }
-
-    workerManager.update(deltaT);
-    stopWatch.update();
+    imageLoading.draw();
 }
 
 function gotFile(file) {
     if (file.type.includes("image")) {
+        imageLoading.reset();
+        imageLoading.update(0);
         var img = createImg(file.data, " ", "", () => {
-            const preImage = get();
-            image(img, 0, 0, width, height);
-
-            myPixels.forEach((arr) => {
-                arr.forEach((pixel) => {
-                    pixel.init(
-                        color(preImage.get(pixel.x, pixel.y)),
-                        color(get(pixel.x, pixel.y))
-                    );
-                });
-            });
-
+            pixelLoad(img);
             randPosList = shuffle(
                 Array.from({ length: myPixels.length }, (_, i) => i)
             );
 
-            workerManager.init(count, randPosList, myPixels, width, height);
+            laserManager.init(count, randPosList, myPixels, width, height);
             stopWatch.reset();
             stopWatch.start();
         }).hide();
