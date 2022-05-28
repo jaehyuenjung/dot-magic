@@ -6,10 +6,13 @@ class ImageLoading {
             "#progress-container > .progress-bar"
         );
         this.stateContent = document.querySelector(
-            "#progress-state-container > .state_content"
+            "#progress-state-container .state_content"
         );
         this.stateValue = document.querySelector(
-            "#progress-state-container > .state_value"
+            "#progress-state-container .state_value"
+        );
+        this.dotContainer = document.querySelector(
+            "#progress-state-container .state_dot-container"
         );
         this.visible = false;
     }
@@ -37,12 +40,26 @@ class ImageLoading {
 
             if (content) {
                 this.stateContent.innerText = content;
+
+                if (
+                    this.dotContainer.classList.contains(
+                        "state_dot-container__hidden"
+                    )
+                ) {
+                    this.dotContainer.classList.toggle(
+                        "state_dot-container__hidden"
+                    );
+                }
             }
 
             if (progress === 100) {
                 setTimeout(() => {
                     if (this.visible) {
                         this.visible = false;
+
+                        this.dotContainer.classList.toggle(
+                            "state_dot-container__hidden"
+                        );
                     }
                 }, 500);
             }

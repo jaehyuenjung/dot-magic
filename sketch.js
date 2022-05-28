@@ -1,4 +1,4 @@
-let count = 8;
+let count = 1;
 let per = 32;
 let randPosList = [];
 let myPixels = [];
@@ -12,22 +12,36 @@ function pixelLoad(img) {
 
     let progress = 0;
     const max = myPixels.reduce((result, arr) => result + arr.length, 0);
-
-    myPixels.forEach((arr) =>
+    loadPixels();
+    preImage.loadPixels();
+    setTimeout(() => {
+        imageLoading.update(20, "Pixels Load");
+    }, 0);
+    myPixels.forEach(async (arr) => {
         arr.forEach((pixel) => {
             pixel.init(
-                color(preImage.get(pixel.x, pixel.y)),
-                color(get(pixel.x, pixel.y))
+                color(
+                    Array.from(
+                        { length: 4 },
+                        (_, i) => preImage.pixels[pixel.index + i]
+                    )
+                ),
+                color(
+                    Array.from({ length: 4 }, (_, i) => pixels[pixel.index + i])
+                )
             );
-            setTimeout(() => {
-                progress += 1;
-                imageLoading.update(round((progress / max) * 100, 1));
-            }, 0);
-        })
-    );
+        });
+        setTimeout(() => {
+            progress += arr.length;
+            const percentange = round((progress / max) * 100);
+            const content = percentange === 100 ? "complete" : "";
+            imageLoading.update(20 + round(percentange * 0.8), content);
+        }, 0);
+    });
 }
 
 function setup() {
+    pixelDensity(1);
     const canvas = createCanvas(500, 500);
     canvas.canvas.onclick = () => {
         const input = document.createElement("input");
@@ -46,6 +60,16 @@ function setup() {
         input.click();
     };
 
+    canvas.canvas.ondragover = (event) => {
+        event.preventDefault();
+    };
+    canvas.canvas.ondrop = (event) => {
+        if (event.dataTransfer.files && event.dataTransfer.files[0]) {
+            gotFile(event.dataTransfer.files[0]);
+        }
+        event.preventDefault();
+    };
+
     background(255);
     fill(0);
     noStroke();
@@ -53,26 +77,32 @@ function setup() {
     textAlign(CENTER);
     text("Load an image file onto the canvas.", width / 2, height / 2);
 
-    let index = 0;
+    loadPixels();
     for (let i = 0; i < height; i += per) {
         for (let j = 0; j < width; j += per) {
             const arr = [];
             for (let k = 0; k < per * per; k++) {
                 const posX = j + (k % per);
                 const posY = i + floor(k / per);
+                const pos = 4 * (posY * width + posX);
                 if (posX < width && posY < height) {
                     arr.push(
                         new Pixel(
                             posX,
                             posY,
+                            pos,
                             color(255),
-                            color(get(posX, posY))
+                            color([
+                                pixels[pos + 0],
+                                pixels[pos + 1],
+                                pixels[pos + 2],
+                                pixels[pos + 3],
+                            ])
                         )
                     );
                 }
             }
-            myPixels[index] = arr;
-            index += 1;
+            myPixels.push(arr);
         }
     }
 
@@ -90,7 +120,7 @@ function setup() {
     stopWatch.start();
 
     imageLoading = new ImageLoading();
-    canvas.drop(gotFile);
+    // canvas.drop(gotFile);
 }
 
 function draw() {
@@ -107,20 +137,26 @@ function draw() {
     imageLoading.draw();
 }
 
-function gotFile(file) {
+async function gotFile(file) {
     if (file.type.includes("image")) {
         imageLoading.reset();
-        imageLoading.update(0);
-        var img = createImg(file.data, " ", "", () => {
-            pixelLoad(img);
-            randPosList = shuffle(
-                Array.from({ length: myPixels.length }, (_, i) => i)
-            );
+        imageLoading.update(0, "Image Load");
+        loader(URL.createObjectURL(file), (p) => {
+            setTimeout(() => {
+                imageLoading.update(round(p * 0.2));
+            }, 0);
+        }).then((url) => {
+            var img = createImg(url, " ", "", () => {
+                pixelLoad(img);
+                randPosList = shuffle(
+                    Array.from({ length: myPixels.length }, (_, i) => i)
+                );
 
-            laserManager.init(count, randPosList, myPixels, width, height);
-            stopWatch.reset();
-            stopWatch.start();
-        }).hide();
+                laserManager.init(count, randPosList, myPixels, width, height);
+                stopWatch.reset();
+                stopWatch.start();
+            }).hide();
+        });
     } else {
         console.log("Not an image file!");
     }

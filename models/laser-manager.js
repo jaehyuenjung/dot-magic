@@ -1,5 +1,12 @@
 class LaserManager {
-    constructor(count, schedule, loadMap, scaleWidth, scaleHeight) {
+    constructor(
+        count,
+        schedule,
+        loadMap,
+        scaleWidth,
+        scaleHeight,
+        isFixed = true
+    ) {
         this.index = 0;
         this.count = count;
         this.schedule = schedule;
@@ -10,7 +17,7 @@ class LaserManager {
             { length: this.count },
             () => new Laser(0, 0, schedule, loadMap)
         );
-
+        this.isFixed = isFixed;
         this.randPlace();
     }
 
@@ -56,14 +63,21 @@ class LaserManager {
                     this.lasers[i].update(deltaT, toDos[i]);
                 }
             }
-
-            this.randPlace();
+            if (!this.isFixed) {
+                this.randPlace();
+            }
         }
         this.loadMap.forEach((arr) =>
             arr.forEach((pixel) => pixel.update(deltaT))
         );
+        loadPixels();
         this.loadMap.forEach((arr) =>
-            arr.forEach((pixel) => set(pixel.x, pixel.y, pixel.color))
+            arr.forEach((pixel) => {
+                pixels[pixel.index + 0] = pixel.color.levels[0];
+                pixels[pixel.index + 1] = pixel.color.levels[1];
+                pixels[pixel.index + 2] = pixel.color.levels[2];
+                pixels[pixel.index + 3] = pixel.color.levels[3];
+            })
         );
         updatePixels();
         if (this.index < this.loadMap.length) {
@@ -81,7 +95,7 @@ class LaserManager {
         return this.index >= this.loadMap.length;
     }
 
-    init(count, schedule, loadMap, scaleWidth, scaleHeight) {
+    init(count, schedule, loadMap, scaleWidth, scaleHeight, isFixed = true) {
         this.index = 0;
         this.count = count;
         this.schedule = schedule;
@@ -95,7 +109,7 @@ class LaserManager {
                 this.lasers[i] = new Laser(0, 0, schedule, loadMap);
             }
         });
-
+        this.isFixed = isFixed;
         this.randPlace();
     }
 }

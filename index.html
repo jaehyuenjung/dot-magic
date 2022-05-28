@@ -2,6 +2,7 @@
 <html lang="en">
     <head>
         <script src="libs/p5.js"></script>
+        <script src="libs/utils.js"></script>
         <link rel="stylesheet" type="text/css" href="style.css" />
         <meta charset="utf-8" />
     </head>
@@ -16,8 +17,17 @@
                         value="80"
                     ></progress>
                     <div id="progress-state-container">
-                        <span class="state_content">Downloading progress:</span>
-                        <span class="state_value">100%</span>
+                        <div>
+                            <span class="state_content"></span>
+                            <div
+                                class="state_dot-container state_dot-container__hidden"
+                            >
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                                <div class="dot"></div>
+                            </div>
+                        </div>
+                        <span class="state_value"></span>
                     </div>
                 </div>
             </div>
