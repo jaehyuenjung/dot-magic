@@ -7,31 +7,40 @@
         <meta charset="utf-8" />
     </head>
     <body>
-        <main id="canvas-container">
-            <div id="loading-container" class="loading-container__hidden">
-                <div id="progress-container">
-                    <progress
-                        class="progress-bar"
-                        min="0"
-                        max="100"
-                        value="80"
-                    ></progress>
-                    <div id="progress-state-container">
-                        <div>
-                            <span class="state_content"></span>
-                            <div
-                                class="state_dot-container state_dot-container__hidden"
-                            >
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                            </div>
+        <div id="canvas-container">
+            <main>
+                <div id="loading-container" class="loading-container__hidden">
+                    <div id="progress-container">
+                        <div class="sk-folding-cube">
+                            <div class="sk-cube1 sk-cube"></div>
+                            <div class="sk-cube2 sk-cube"></div>
+                            <div class="sk-cube4 sk-cube"></div>
+                            <div class="sk-cube3 sk-cube"></div>
                         </div>
-                        <span class="state_value"></span>
+                        <progress
+                            class="progress-bar"
+                            min="0"
+                            max="100"
+                            value="0"
+                        ></progress>
+                        <div id="progress-state-container">
+                            <div>
+                                <span class="state_content"></span>
+                                <div
+                                    class="state_dot-container state_dot-container__hidden"
+                                >
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                    <div class="dot"></div>
+                                </div>
+                            </div>
+                            <span class="state_value"></span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </main>
+            </main>
+        </div>
+        <div id="form-container">Form View</div>
         <script src="sketch.js"></script>
         <script src="models/pixel.js"></script>
         <script src="models/animate.js"></script>

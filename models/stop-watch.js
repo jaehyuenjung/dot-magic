@@ -5,7 +5,9 @@ class StopWatch {
         this.span = document.createElement("span");
         this.span.innerText = `${round(this.curTime, 2)} seconds...`;
         this.span.classList.add("stop-watch");
-        document.getElementById("canvas-container").appendChild(this.span);
+        document
+            .querySelector("#canvas-container > main")
+            .appendChild(this.span);
     }
     reset() {
         this.curTime = 0;

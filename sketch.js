@@ -1,7 +1,12 @@
+let page = 1;
+let scrolling = false;
+
 let count = 1;
 let per = 32;
+
 let randPosList = [];
 let myPixels = [];
+
 let stopWatch;
 let laserManager;
 let imageLoading;
@@ -120,7 +125,6 @@ function setup() {
     stopWatch.start();
 
     imageLoading = new ImageLoading();
-    // canvas.drop(gotFile);
 }
 
 function draw() {
@@ -159,5 +163,47 @@ async function gotFile(file) {
         });
     } else {
         console.log("Not an image file!");
+    }
+}
+
+// fullpage 스크롤 관련
+window.addEventListener("scroll", (event) => {
+    event.preventDefault();
+    let flag = true;
+    const halfHeight = document.body.clientHeight / 2;
+    if (page === 1 && window.scrollY > 0 + document.body.clientHeight * 0.06)
+        page = 2;
+    else if (
+        page === 2 &&
+        window.scrollY < halfHeight - document.body.clientHeight * 0.06
+    )
+        page = 1;
+    else flag = false;
+
+    if (flag && !scrolling) {
+        if (page === 1) scrollToTop(window.scrollY, 0);
+        else scrollToTop(window.scrollY, halfHeight);
+    }
+    return false;
+});
+
+function scrollToTop(from, to, duration = 0.2) {
+    if (!scrolling) {
+        scrolling = true;
+        let prev = Date.now();
+        const scroll = () => {
+            const now = Date.now();
+            const t = Math.min((now - prev) / 1000 / duration, 1);
+            const pos = (1 - t) * from + t * to;
+            window.scrollTo(0, pos);
+
+            if (t === 1) {
+                scrolling = false;
+                return;
+            } else {
+                requestAnimationFrame(scroll);
+            }
+        };
+        requestAnimationFrame(scroll);
     }
 }
