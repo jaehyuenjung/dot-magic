@@ -1,6 +1,6 @@
 const maxCount = 100;
-const maxPer = 500;
-const maxDuration = 10;
+const maxPer = 250;
+const maxDuration = 5000;
 
 let page = 1;
 let scrolling = false;
