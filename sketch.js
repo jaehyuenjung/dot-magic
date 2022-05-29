@@ -1,13 +1,13 @@
-const maxCount = 100;
+const maxCount = 50;
 const maxPer = 250;
-const maxDuration = 5000;
+const maxDuration = 500;
 
 let page = 1;
 let scrolling = false;
 
 let count = 1;
-let per = 40;
-let duration = 1;
+let per = 20;
+let duration = 0;
 
 let randPosList = [];
 let myPixels = [];
