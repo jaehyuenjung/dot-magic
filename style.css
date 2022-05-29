@@ -294,8 +294,8 @@ canvas {
 }
 
 #form-container > form {
-    height: 80%;
-    aspect-ratio: 1.5 / 1;
+    width: 80%;
+    aspect-ratio: 2 / 1;
     border: 1px solid black;
     display: flex;
     justify-content: center;
@@ -314,7 +314,7 @@ canvas {
 }
 
 round-slider {
-    max-width: 200px;
+    max-width: 70%;
     transition: all 1.3s ease-out 0s;
 }
 
@@ -328,7 +328,12 @@ round-slider {
 }
 
 .content-value-container > span:first-child {
-    font-size: 20px;
+    font-size: 4rem;
+    font-weight: bold;
+}
+
+.content-value-container > span:last-child {
+    font-size: 2rem;
     font-weight: bold;
 }
 
@@ -338,9 +343,14 @@ round-slider {
     align-items: center;
 }
 
+.content-label-container > span {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
 .content-label-container svg {
     margin-left: 4px;
-    height: 20px;
+    height: 2rem;
     aspect-ratio: 1 / 1;
 }
 
@@ -355,18 +365,17 @@ round-slider {
 }
 
 .tooltip .tooltiptext {
-    font-size: 10px;
+    font-size: 1.5rem;
     visibility: hidden;
-    width: 120px;
     background-color: black;
     color: #fff;
     text-align: center;
     padding: 5px 0;
     border-radius: 6px;
-    width: 120px;
+    width: 240px;
     top: 110%;
     left: 48%;
-    margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+    margin-left: -120px; /* Use half of the width (120/2 = 60), to center the tooltip */
 
     /* Position the tooltip text - see examples below! */
     position: absolute;
@@ -387,4 +396,18 @@ round-slider {
 
 .tooltip:hover .tooltiptext {
     visibility: visible;
+}
+
+@media (max-width: 767px) {
+    .content-value-container > span:first-child {
+        font-size: 3rem;
+        font-weight: bold;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .content-value-container > span:first-child {
+        font-size: 3rem;
+        font-weight: bold;
+    }
 }
