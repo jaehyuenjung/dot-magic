@@ -1,8 +1,13 @@
+const maxCount = 100;
+const maxPer = 500;
+const maxDuration = 10;
+
 let page = 1;
 let scrolling = false;
 
 let count = 1;
-let per = 32;
+let per = 40;
+let duration = 1;
 
 let randPosList = [];
 let myPixels = [];
@@ -10,6 +15,11 @@ let myPixels = [];
 let stopWatch;
 let laserManager;
 let imageLoading;
+
+let form;
+window.addEventListener("load", () => {
+    form = new Form();
+});
 
 function pixelLoad(img) {
     const preImage = get();
@@ -33,7 +43,8 @@ function pixelLoad(img) {
                 ),
                 color(
                     Array.from({ length: 4 }, (_, i) => pixels[pixel.index + i])
-                )
+                ),
+                duration
             );
         });
         setTimeout(() => {
@@ -43,6 +54,63 @@ function pixelLoad(img) {
             imageLoading.update(20 + round(percentange * 0.8), content);
         }, 0);
     });
+}
+
+function pixelInit() {
+    const preImage = get();
+
+    background(255);
+    fill(0);
+    noStroke();
+    textSize(24);
+    textAlign(CENTER);
+    text("Load an image file onto the canvas.", width / 2, height / 2);
+
+    let progress = 0;
+    const max = myPixels.reduce((result, arr) => result + arr.length, 0);
+    myPixels = [];
+
+    loadPixels();
+    preImage.loadPixels();
+    for (let i = 0; i < height; i += per) {
+        for (let j = 0; j < width; j += per) {
+            const arr = [];
+            for (let k = 0; k < per * per; k++) {
+                const posX = j + (k % per);
+                const posY = i + floor(k / per);
+                const pos = 4 * (posY * width + posX);
+                if (posX < width && posY < height) {
+                    arr.push(
+                        new Pixel(
+                            posX,
+                            posY,
+                            pos,
+                            color(
+                                Array.from(
+                                    { length: 4 },
+                                    (_, i) => preImage.pixels[pos + i]
+                                )
+                            ),
+                            color(
+                                Array.from(
+                                    { length: 4 },
+                                    (_, i) => pixels[pos + i]
+                                )
+                            ),
+                            duration
+                        )
+                    );
+                }
+            }
+            myPixels.push(arr);
+            setTimeout(() => {
+                progress += arr.length;
+                const percentange = round((progress / max) * 100);
+                const content = percentange === 100 ? "complete" : "";
+                imageLoading.update(percentange, content);
+            }, 0);
+        }
+    }
 }
 
 function setup() {
@@ -102,7 +170,8 @@ function setup() {
                                 pixels[pos + 1],
                                 pixels[pos + 2],
                                 pixels[pos + 3],
-                            ])
+                            ]),
+                            duration
                         )
                     );
                 }
@@ -181,13 +250,44 @@ window.addEventListener("scroll", (event) => {
     else flag = false;
 
     if (flag && !scrolling) {
-        if (page === 1) scrollToTop(window.scrollY, 0);
-        else scrollToTop(window.scrollY, halfHeight);
+        if (page === 1) {
+            scrollToTop(window.scrollY, 0, 0.2, () => {
+                form.pageLoad(false, () => {
+                    setTimeout(() => {
+                        imageLoading.reset();
+                        imageLoading.update(0, "Pixels Load");
+                    }, 0);
+
+                    count = round(maxCount * (form.values[0] / 100));
+                    per = round(maxPer * (form.values[1] / 100));
+                    duration = maxDuration * (form.values[2] / 100);
+
+                    pixelInit();
+                    randPosList = shuffle(
+                        Array.from({ length: myPixels.length }, (_, i) => i)
+                    );
+
+                    laserManager.init(
+                        count,
+                        randPosList,
+                        myPixels,
+                        width,
+                        height
+                    );
+                    stopWatch.reset();
+                    stopWatch.start();
+                });
+            });
+        } else {
+            scrollToTop(window.scrollY, halfHeight, 0.2, () =>
+                form.pageLoad(true)
+            );
+        }
     }
     return false;
 });
 
-function scrollToTop(from, to, duration = 0.2) {
+function scrollToTop(from, to, duration = 0.2, callback) {
     if (!scrolling) {
         scrolling = true;
         let prev = Date.now();
@@ -199,6 +299,7 @@ function scrollToTop(from, to, duration = 0.2) {
 
             if (t === 1) {
                 scrolling = false;
+                if (callback) callback();
                 return;
             } else {
                 requestAnimationFrame(scroll);

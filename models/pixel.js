@@ -10,10 +10,11 @@ class Pixel {
         this.animate = new Animate();
     }
 
-    init(from_color, to_color) {
+    init(from_color, to_color, duration = 0) {
         this.color = from_color;
         this.from_color = from_color;
         this.to_color = to_color;
+        this.duration = duration;
         this.animate.init();
     }
 

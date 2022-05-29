@@ -288,4 +288,103 @@ canvas {
     padding: 0;
     width: 100vw;
     height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#form-container > form {
+    height: 80%;
+    aspect-ratio: 1.5 / 1;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #2f3640;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+        rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+
+#form-container .round-slider-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+round-slider {
+    max-width: 200px;
+    transition: all 1.3s ease-out 0s;
+}
+
+.round-slider-container .round-slider-content {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.content-value-container > span:first-child {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.content-label-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-label-container svg {
+    margin-left: 4px;
+    height: 20px;
+    aspect-ratio: 1 / 1;
+}
+
+.content-label-container div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tooltip {
+    position: relative;
+}
+
+.tooltip .tooltiptext {
+    font-size: 10px;
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+    width: 120px;
+    top: 110%;
+    left: 48%;
+    margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip .tooltiptext::after {
+    content: " "; /* 정사각형 영역 사용 */
+    position: absolute; /* 절대 위치 사용 */
+    border-style: solid;
+    border-width: 5px; /* 테두리 넓이를 5px 로 설정 */
+    top: 0%;
+    left: 48%;
+    margin-top: -10px;
+
+    border-color: transparent transparent black transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
 }

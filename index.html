@@ -3,6 +3,7 @@
     <head>
         <script src="libs/p5.js"></script>
         <script src="libs/utils.js"></script>
+        <script src="libs/round-slider.bundle.js"></script>
         <link rel="stylesheet" type="text/css" href="style.css" />
         <meta charset="utf-8" />
     </head>
@@ -40,7 +41,121 @@
                 </div>
             </main>
         </div>
-        <div id="form-container">Form View</div>
+        <div id="form-container">
+            <form>
+                <div class="round-slider-container">
+                    <round-slider
+                        min="1"
+                        value="1"
+                        valueLabel="count"
+                        class="round-slider__count"
+                    >
+                    </round-slider>
+                    <div class="round-slider-content">
+                        <div class="content-value-container">
+                            <span class="slider-count-value"></span>
+                            <span class="slider-unit">%</span>
+                        </div>
+                        <div class="content-label-container">
+                            <span>Count</span>
+                            <div class="tooltip">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                </svg>
+                                <span class="tooltiptext"
+                                    >프레임 당 로드되는 픽셀의 개수를 의미하며,
+                                    이 값이 증가될수록 실행 시간은 감소합니다.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="round-slider-container">
+                    <round-slider
+                        min="1"
+                        value="8"
+                        valueLabel="per"
+                        class="round-slider__per"
+                    >
+                    </round-slider>
+                    <div class="round-slider-content">
+                        <div class="content-value-container">
+                            <span class="slider-per-value"></span>
+                            <span class="slider-unit">%</span>
+                        </div>
+                        <div class="content-label-container">
+                            <span>Per</span>
+                            <div class="tooltip">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                </svg>
+                                <span class="tooltiptext"
+                                    >픽셀의 묶음 단위를 나타내며, 이 값이
+                                    증가될수록 실행 시간이 감소합니다.</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="round-slider-container">
+                    <round-slider
+                        min="0"
+                        value="20"
+                        valueLabel="duration"
+                        class="round-slider__duration"
+                    >
+                    </round-slider>
+                    <div class="round-slider-content">
+                        <div class="content-value-container">
+                            <span class="slider-duration-value"></span>
+                            <span class="slider-unit">%</span>
+                        </div>
+                        <div class="content-label-container">
+                            <span>Duration</span>
+                            <div class="tooltip">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                </svg>
+                                <span class="tooltiptext"
+                                    >한 픽셀이 지정되고 보이는데까지의
+                                    시간</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
         <script src="sketch.js"></script>
         <script src="models/pixel.js"></script>
         <script src="models/animate.js"></script>
@@ -48,5 +163,7 @@
         <script src="models/laser.js"></script>
         <script src="models/laser-manager.js"></script>
         <script src="models/imageLoading.js"></script>
+        <script src="models/slider.js"></script>
+        <script src="models/form.js"></script>
     </body>
 </html>
